@@ -1,0 +1,25 @@
+
+start_date: "2017-02-25"
+end_date: "2023-02-25"
+
+stocks:
+  - AAPL
+  - AMZN
+  - BRK-B
+  - CSCO
+  - DIS
+  - GOOG
+  - HD
+  - JNJ
+  - JPM
+  - MCD
+  - MSFT
+  - NKE
+  - NVDA
+  - PEP
+  - PFE
+  - TSLA
+  - UNH
+  - V
+  - WFC
+  - XOM
