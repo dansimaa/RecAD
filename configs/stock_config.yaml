@@ -1,9 +1,10 @@
 random_seed: 42
 
 # Data Simulation
-corr_config_path: "./configs/corr_matrix_config.yaml"
-n_stocks: 20
-n_years: 6
-s0: 100 
-mu: [0.01, 0.2]
-sigma: [0.01, 0.1] 
+simulation:
+  corr_config_path: "./configs/corr_matrix_config.yaml"
+  n_stocks: 20
+  n_years: 6
+  s0: 100 
+  mu: [0.01, 0.2]
+  sigma: [0.01, 0.1] 
