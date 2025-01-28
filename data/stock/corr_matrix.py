@@ -50,8 +50,7 @@ class CorrelationMatrix:
 
         self._corr_matrix = self._compute_corr_matrix()
 
-    @staticmethod
-    def _load_and_validate_config(config_path: str) -> Dict:
+    def _load_and_validate_config(self, config_path: str) -> Dict:
         """Load and validate configuration."""
         config = ConfigLoader.load_config(config_path)
         ConfigLoader.validate_config(config, ["start_date", "end_date", "stocks"])
