@@ -1,6 +1,9 @@
+# Date range for the time series data used in computing the correlation matrix
+# Data will be fetched from the start_date to the end_date (YYYY-MM-DD)
 start_date: "2017-02-25"
 end_date: "2023-02-25"
 
+# Stock tickers for which the correlation matrix will be computed.
 stocks:
   - AAPL
   - AMZN
