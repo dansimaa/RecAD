@@ -1,10 +1,11 @@
+# Set the random seed
 random_seed: 42
 
-# Data Simulation
+# Data Simulation: Black and Scholes model parameters 
 simulation:
   corr_config_path: "./configs/corr_matrix_config.yaml"
   n_stocks: 20
   n_years: 6
-  s0: 100 
-  mu: [0.01, 0.2]
-  sigma: [0.01, 0.1] 
+  s0: 100               # initial stock price
+  mu: [0.01, 0.2]       # stocks' drifts
+  sigma: [0.01, 0.1]    # stocks' volatilities
