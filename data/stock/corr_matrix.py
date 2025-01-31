@@ -1,4 +1,5 @@
 from typing import List, Dict
+import warnings
 import numpy as np
 import pandas as pd
 import yfinance as yf
@@ -49,6 +50,7 @@ class CorrelationMatrix:
         self.stock_data = self._fetch_stock_data()
 
         self._corr_matrix = self._compute_corr_matrix()
+        self._check_corr_matrix()
 
     def _load_and_validate_config(self, config_path: str) -> Dict:
         """Load and validate configuration."""
@@ -70,6 +72,23 @@ class CorrelationMatrix:
         calculator = CorrelationMatrixCalculator(self.stock_data)
         return calculator.compute_corr_matrix()
 
+    @staticmethod
+    def _is_valid_correlation_matrix(matrix: np.ndarray) -> bool:
+        """Validate the correlation matrix."""
+        return (
+            isinstance(matrix, np.ndarray) and
+            matrix.shape[0] == matrix.shape[1] and
+            np.allclose(matrix, matrix.T) and
+            np.allclose(np.diagonal(matrix), 1)
+        )
+    
+    def _check_corr_matrix(self):
+        if not self._is_valid_correlation_matrix(self._corr_matrix):
+            warnings.warn(
+                "The computed correlation matrix is invalid.", UserWarning
+            )
+    
     def get_corr_matrix(self) -> np.ndarray:
         """Getter method for the correlation matrix."""
         return self._corr_matrix
+    
