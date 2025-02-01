@@ -1,10 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import Tuple, Dict
 import numpy as np
+from data.stock.configs.stock_config import SimulationConfig
 from data.stock.corr_matrix import CorrelationMatrix
 from data.utils.random_utils import RandomUtils
-
-TRADING_DAYS_PER_YEAR: int = 250
 
 
 class SimulationModel(ABC):
@@ -53,18 +52,13 @@ class BlackScholesMonteCarlo(SimulationModel):
 class StockSimulator:
     """Class responsible for simulating stock prices based on configurations."""
 
-    def __init__(self, config: Dict):
+    def __init__(self, config: SimulationConfig, random_seed: int):
         self.config = config
-        self.random_seed = config["random_seed"]
-        self.n_stocks = config["simulation"]["n_stocks"]
-        self.n_years = config["simulation"]["n_years"]
-        self.n_days = self.n_years * TRADING_DAYS_PER_YEAR 
-        self.s0 = config["simulation"]["s0"]
-        self.mu_range = config["simulation"]["mu"]
-        self.sigma_range = config["simulation"]["sigma"]
+        self.random_seed = random_seed
+        self.n_days = self.config.n_years * self.config.trading_days_per_year
 
         correlation_matrix = CorrelationMatrix(
-            config["simulation"]["corr_config_path"]
+            self.config.corr_config_path
         ).get_corr_matrix()
         
         self.simulation_model = BlackScholesMonteCarlo(
@@ -72,16 +66,24 @@ class StockSimulator:
             self.random_seed
         )
 
-    def _generate_random_parameters(self) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    def _generate_random_parameters(
+            self
+        ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """Generate initial stock prices, drift, and volatility values."""
         RandomUtils.set_seed(self.random_seed)
-        S0 = self.s0 + np.random.randn(self.n_stocks)
-        mu = self.mu_range[0] + (self.mu_range[1] - self.mu_range[0]) * np.random.rand(self.n_stocks)
-        sigma = self.sigma_range[0] + (self.sigma_range[1] - self.sigma_range[0]) * np.random.rand(self.n_stocks)
+        S0 = self.config.s0 + np.random.randn(self.config.n_stocks)
+        mu = np.random.uniform(
+            self.config.mu[0], self.config.mu[1], self.config.n_stocks
+        )
+        sigma = np.random.uniform(
+            self.config.sigma[0], self.config.sigma[1], self.config.n_stocks
+        )
         return S0, mu, sigma
     
     def simulate_stock_prices(self) -> np.ndarray:
         """Simulate stock prices using the chosen model."""
         S0, mu, sigma = self._generate_random_parameters()
-        stock_prices = self.simulation_model.run(S0, mu, sigma, self.n_years, self.n_days)
+        stock_prices = self.simulation_model.run(
+            S0, mu, sigma, self.config.n_years, self.n_days
+        )
         return stock_prices 
