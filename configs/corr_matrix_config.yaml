@@ -3,6 +3,8 @@
 start_date: "2017-02-25"
 end_date: "2023-02-25"
 
+price_field: "Adj Close"
+
 # Stock tickers for which the correlation matrix will be computed.
 stocks:
   - AAPL
